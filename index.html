@@ -4,50 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Supply Chain Graph</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f3e9; /* Warm, light background */
+      margin: 0;
+      padding: 0;
+      color: #4e4e4e; /* Dark gray text for contrast */
+    }
+
     #connections-graph-container {
       position: relative;
-      background-color: black;
-      margin: 0 auto;
-      width: 100%;
-      padding: 10px;
+      background-color: #fff;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 1200px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      border-radius: 8px;
+      border: 1px solid #f0e6d6; /* Light beige border */
     }
 
     #connections-graph {
       height: 700px;
       width: 100%;
-      border: 1px solid #333;
+      border: none;
       border-radius: 8px;
-      overflow: hidden;
+      background-color: #f3f0e1; /* Light coffee color for the graph background */
     }
 
     .toggle-physics-button {
-      background-color: #4a90e2;
-      color: white;
+      background-color: #d87c4f; /* Coffee brown */
+      color: #fff;
       padding: 12px 24px;
       border: none;
-      border-radius: 4px;
+      border-radius: 25px; /* Rounded edges */
       font-size: 18px;
-      margin: 0 auto;
+      margin: 20px 0;
       cursor: pointer;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 10px;
-      z-index: 9999;
-      transition: background-color 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .toggle-physics-button:hover {
-      background-color: #357abd;
+      background-color: #c7654b; /* Slightly darker brown on hover */
     }
 
     .toggle-physics-button:active {
-      transform: translateY(1px);
+      transform: translateY(2px); /* Slight push-down effect */
+    }
+
+    .vis-network {
+      border-radius: 8px;
+    }
+
+    .vis-node {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      color: #3e3e3e;
+    }
+
+    .vis-label {
+      font-size: 14px;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -85,7 +110,7 @@
 
     const groups = {
       item: {
-        color: { background: '#4a90e2', border: '#357abd' }
+        color: { background: '#d87c4f', border: '#c7654b' } // Coffee-inspired colors for item nodes
       },
       tag: {
         color: { background: '#e24a4a', border: '#bd3535' }
