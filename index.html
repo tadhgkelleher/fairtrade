@@ -150,7 +150,7 @@
       nodes: {
         shape: 'dot',
         font: { 
-          size: 14,
+          size: 20,  // Increased label size
           color: '#F5DEB3'
         },
       },
@@ -201,6 +201,8 @@
     toggleButton.addEventListener("click", function () {
       physicsEnabled = !physicsEnabled;
       options.physics.enabled = physicsEnabled;
+
+      // Toggle between circular and random layout
       if (currentLayout === "circular") {
         options.layout.randomSeed = 2;
         options.layout.circular = false;
@@ -212,7 +214,8 @@
         currentLayout = "circular";
         toggleButton.textContent = "Switch to Random Layout";
       }
-      network.setOptions(options);
+
+      network.setOptions(options); // Reapply the updated options
     });
   });
 </script>
