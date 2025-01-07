@@ -3,76 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supply Chain Graph</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Coffee Shop Supply Chain Graph</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f7f3e9; /* Warm, light background */
-      margin: 0;
-      padding: 0;
-      color: #4e4e4e; /* Dark gray text for contrast */
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
     }
 
     #connections-graph-container {
       position: relative;
-      background-color: #fff;
-      margin: 20px auto;
-      width: 90%;
-      max-width: 1200px;
+      background-color: #fafafa;
+      margin: 0 auto;
+      width: 100%;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
-      border: 1px solid #f0e6d6; /* Light beige border */
     }
 
     #connections-graph {
       height: 700px;
       width: 100%;
-      border: none;
+      border: 1px solid #ddd;
       border-radius: 8px;
-      background-color: #f3f0e1; /* Light coffee color for the graph background */
+      overflow: hidden;
     }
 
     .toggle-physics-button {
-      background-color: #d87c4f; /* Coffee brown */
-      color: #fff;
+      background-color: #6f4f37;  /* Coffee brown color */
+      color: white;
       padding: 12px 24px;
       border: none;
-      border-radius: 25px; /* Rounded edges */
+      border-radius: 4px;
       font-size: 18px;
-      margin: 20px 0;
+      margin: 0 auto;
       cursor: pointer;
       text-align: center;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 10px;
+      z-index: 9999;
+      transition: background-color 0.3s ease;
     }
 
     .toggle-physics-button:hover {
-      background-color: #c7654b; /* Slightly darker brown on hover */
+      background-color: #5a3c28;  /* Darker brown */
     }
 
     .toggle-physics-button:active {
-      transform: translateY(2px); /* Slight push-down effect */
+      transform: translateY(1px);
     }
 
-    .vis-network {
-      border-radius: 8px;
-    }
-
-    .vis-node {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 500;
-      color: #3e3e3e;
-    }
-
-    .vis-label {
-      font-size: 14px;
-      font-weight: 600;
+    .vis-network .vis-label {
+      color: black !important;
     }
   </style>
 </head>
@@ -110,10 +97,10 @@
 
     const groups = {
       item: {
-        color: { background: '#d87c4f', border: '#c7654b' } // Coffee-inspired colors for item nodes
+        color: { background: '#d29565', border: '#ac734f' }  /* Coffee beige and brown */
       },
       tag: {
-        color: { background: '#e24a4a', border: '#bd3535' }
+        color: { background: '#6e4f37', border: '#5a3c28' }  /* Dark coffee brown */
       }
     };
 
@@ -124,7 +111,7 @@
         title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
         group: "item",
         size: item.tags.length * 2,
-        font: { color: '#ffffff' }
+        font: { color: 'black' }
       };
       nodes.add(itemNode);
 
@@ -135,7 +122,7 @@
             id: tag, 
             label: tag, 
             group: "tag",
-            font: { color: '#ffffff' }
+            font: { color: 'black' }
           });
         }
         edges.add({ 
