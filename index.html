@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supply Chain Graph</title>
+  <title>Fairtrade Coffee Supply Chain</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
     #connections-graph-container {
       position: relative;
-      background-color: black;
+      background-color: #f4f1e1;
       margin: 0 auto;
       width: 100%;
       padding: 10px;
@@ -26,7 +26,7 @@
     }
 
     .toggle-physics-button {
-      background-color: #4a90e2;
+      background-color: #6d4c41;
       color: white;
       padding: 12px 24px;
       border: none;
@@ -43,7 +43,7 @@
     }
 
     .toggle-physics-button:hover {
-      background-color: #357abd;
+      background-color: #5d4037;
     }
 
     .toggle-physics-button:active {
@@ -62,21 +62,18 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const items = [
-      { id: 1, title: "Raw Material Supplier", tags: ["Raw Materials", "Supplier"] },
-      { id: 2, title: "Component Manufacturer", tags: ["Manufacturing", "Supplier"] },
-      { id: 3, title: "Assembly Plant", tags: ["Assembly", "Manufacturer"] },
-      { id: 4, title: "Warehousing Facility", tags: ["Warehousing", "Logistics"] },
-      { id: 5, title: "Distributor", tags: ["Distribution", "Logistics"] },
-      { id: 6, title: "Retailer", tags: ["Retail", "Customer"] },
-      { id: 7, title: "Logistics Service Provider", tags: ["Logistics", "Transport"] },
-      { id: 8, title: "Raw Material Supplier 2", tags: ["Raw Materials", "Supplier"] },
-      { id: 9, title: "Packaging Supplier", tags: ["Packaging", "Supplier"] },
-      { id: 10, title: "Supplier 3", tags: ["Supplier", "Logistics"] },
-      { id: 11, title: "Customer", tags: ["Customer", "End User"] },
-      { id: 12, title: "Supplier 4", tags: ["Raw Materials", "Supplier"] },
-      { id: 13, title: "Manufacturer", tags: ["Manufacturing", "Manufacturer"] },
-      { id: 14, title: "Supply Chain Manager", tags: ["Logistics", "Management"] },
-      { id: 15, title: "Logistics Coordinator", tags: ["Logistics", "Management"] }
+      { id: 1, title: "Coffee Farmers", tags: ["Farmers", "Sustainability", "Fairtrade"] },
+      { id: 2, title: "Fairtrade Certification", tags: ["Certification", "Ethical"] },
+      { id: 3, title: "Coffee Roasters", tags: ["Roasting", "Processing"] },
+      { id: 4, title: "Distributors", tags: ["Logistics", "Distribution"] },
+      { id: 5, title: "Retail Coffee Shops", tags: ["Retail", "Customer"] },
+      { id: 6, title: "Environment Protection", tags: ["Environment", "Sustainability"] },
+      { id: 7, title: "Fairtrade Partners", tags: ["Partners", "Ethical"] },
+      { id: 8, title: "Packaging", tags: ["Packaging", "Sustainability"] },
+      { id: 9, title: "Coffee Drinkers", tags: ["Customer", "Consumer"] },
+      { id: 10, title: "Supply Chain Transparency", tags: ["Transparency", "Ethical"] },
+      { id: 11, title: "Organic Coffee Growers", tags: ["Farmers", "Sustainability", "Organic"] },
+      { id: 12, title: "Fairtrade Advocates", tags: ["Advocacy", "Fairtrade"] }
     ];
 
     const nodes = new vis.DataSet([]);
@@ -84,12 +81,16 @@
     const nodeConnections = {};
 
     const groups = {
-      item: {
-        color: { background: '#4a90e2', border: '#357abd' }
-      },
-      tag: {
-        color: { background: '#e24a4a', border: '#bd3535' }
-      }
+      farmer: { color: { background: '#6d4c41', border: '#5d4037' } },
+      roaster: { color: { background: '#8d6e63', border: '#795548' } },
+      distributor: { color: { background: '#a1887f', border: '#7e6a57' } },
+      retail: { color: { background: '#c79a6c', border: '#a67c52' } },
+      environmental: { color: { background: '#81c784', border: '#388e3c' } },
+      certification: { color: { background: '#e64a19', border: '#c43e00' } },
+      packaging: { color: { background: '#c8e6c9', border: '#81c784' } },
+      customer: { color: { background: '#d2b48c', border: '#a52a2a' } },
+      ethical: { color: { background: '#ffeb3b', border: '#fbc02d' } },
+      transparency: { color: { background: '#0277bd', border: '#01579b' } }
     };
 
     items.forEach(item => {
@@ -97,24 +98,37 @@
         id: item.id,
         label: item.title,
         title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
-        group: "item",
+        group: "farmer", // Default group; will update based on tags
         size: item.tags.length * 2,
         font: { color: '#ffffff' }
       };
+
+      // Assign the node to a group based on its tags
+      if (item.tags.includes('Farmers')) itemNode.group = "farmer";
+      else if (item.tags.includes('Roasting')) itemNode.group = "roaster";
+      else if (item.tags.includes('Logistics')) itemNode.group = "distributor";
+      else if (item.tags.includes('Retail')) itemNode.group = "retail";
+      else if (item.tags.includes('Environment')) itemNode.group = "environmental";
+      else if (item.tags.includes('Certification')) itemNode.group = "certification";
+      else if (item.tags.includes('Packaging')) itemNode.group = "packaging";
+      else if (item.tags.includes('Customer')) itemNode.group = "customer";
+      else if (item.tags.includes('Ethical')) itemNode.group = "ethical";
+      else if (item.tags.includes('Transparency')) itemNode.group = "transparency";
+
       nodes.add(itemNode);
 
       item.tags.forEach(tag => {
         const tagNode = nodes.get(tag);
         if (!tagNode) {
-          nodes.add({ 
-            id: tag, 
-            label: tag, 
-            group: "tag",
+          nodes.add({
+            id: tag,
+            label: tag,
+            group: "ethical", // Default group for tags
             font: { color: '#ffffff' }
           });
         }
-        edges.add({ 
-          from: item.id, 
+        edges.add({
+          from: item.id,
           to: tag,
           color: { color: '#666666', highlight: '#999999' }
         });
