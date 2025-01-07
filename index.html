@@ -3,30 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fair Trade Coffee Connections</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
     #connections-graph-container {
       position: relative;
-      background-color: #003300;  /* Deep forest green */
+      background-color: #2C1810;
       margin: 0 auto;
       width: 100%;
       padding: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     #connections-graph {
-      height: 700px;
+      height: 800px;
       width: 100%;
-      border: 2px solid #ffd700;  /* Gold border */
-      border-radius: 8px;
-      overflow: hidden;
     }
 
     .toggle-physics-button {
-      background-color: #2e8b57;  /* Forest green */
-      color: white;
+      background-color: #8B4513;
+      color: #F5DEB3;
       padding: 12px 24px;
       border: none;
       border-radius: 4px;
@@ -42,35 +41,14 @@
     }
 
     .toggle-physics-button:hover {
-      background-color: #228b22;
-    }
-
-    .toggle-physics-button:active {
-      transform: translateY(1px);
-    }
-
-    h1 {
-      color: #ffd700;
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 28px;
-    }
-
-    .sponsorship-heading {
-      color: #ffd700;
-      text-align: center;
-      margin-top: 40px;
-      font-size: 36px;
-      font-weight: bold;
+      background-color: #A0522D;
     }
   </style>
 </head>
 <body>
 
-<div class="sponsorship-heading">Fair Trade Coffee Network</div>
-
 <div id="connections-graph-container">
-  <button class="toggle-physics-button">Toggle Physics</button>
+  <button class="toggle-physics-button">Enable Physics</button>
   <div id="connections-graph"></div>
 </div>
 
@@ -78,134 +56,165 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const items = [
-      { id: 1, title: "Café Brazil", type: "Farm", tags: ["Coffee Beans", "Brazil", "Organic", "Fair Trade"] },
-      { id: 2, title: "Finca la Verde", type: "Farm", tags: ["Coffee Beans", "Colombia", "Organic", "Fair Trade"] },
-      { id: 3, title: "Café el Salvador", type: "Farm", tags: ["Coffee Beans", "El Salvador", "Organic", "Fair Trade"] },
-      { id: 4, title: "Green Beans Inc.", type: "Supplier", tags: ["Brazil", "Organic", "Fair Trade", "Supplier"] },
-      { id: 5, title: "True Coffee Co.", type: "Supplier", tags: ["Colombia", "Organic", "Fair Trade", "Supplier"] },
-      { id: 6, title: "Fresh Brew Distributors", type: "Distributor", tags: ["Distributors", "Brazil", "Colombia", "Fair Trade"] },
-      { id: 7, title: "Eco Coffee Shop", type: "Shop", tags: ["Shop", "Organic", "Fair Trade", "Local Coffee"] },
-      { id: 8, title: "Green Bean Café", type: "Shop", tags: ["Shop", "Organic", "Fair Trade", "Local Coffee"] },
-      { id: 9, title: "Earth Roast Café", type: "Shop", tags: ["Shop", "Fair Trade", "Organic", "Specialty Coffee"] },
-      { id: 10, title: "Cafe Verde", type: "Shop", tags: ["Shop", "Fair Trade", "Brazil", "Organic"] },
-      { id: 11, title: "Café Verde Distribution", type: "Distributor", tags: ["Distributor", "Brazil", "Fair Trade"] },
-      { id: 12, title: "Roast Farms", type: "Plant", tags: ["Plant", "Brazil", "Roasting", "Fair Trade"] },
-      { id: 13, title: "Café Roasters", type: "Plant", tags: ["Plant", "Colombia", "Roasting", "Fair Trade"] },
-      { id: 14, title: "Cafe Trade Network", type: "Profit", tags: ["Profit", "Fair Trade", "Global Coffee"] },
-      { id: 15, title: "Eco Trade Cooperative", type: "Profit", tags: ["Profit", "Sustainable", "Fair Trade"] },
-      { id: 16, title: "Tropical Brews", type: "Supplier", tags: ["Supplier", "Fair Trade", "Brazil"] },
-      { id: 17, title: "Coffee to the People", type: "Supplier", tags: ["Supplier", "Colombia", "Fair Trade"] },
-      { id: 18, title: "Café Bio", type: "Farm", tags: ["Farm", "Brazil", "Fair Trade", "Eco"] },
-      { id: 19, title: "Coffee Connect", type: "Distributor", tags: ["Distributor", "Fair Trade", "Organic"] },
-      { id: 20, title: "Brew Masters", type: "Shop", tags: ["Shop", "Brazil", "Coffee", "Organic"] }
+      { id: 1, title: "Colombian Cooperative", tags: ["Fair Trade", "Organic", "Direct Trade", "Climate Action"] },
+      { id: 2, title: "Ethiopian Union", tags: ["Fair Trade", "Women Owned", "Education", "Heritage"] },
+      { id: 3, title: "Local Roastery", tags: ["Artisan", "Zero Waste", "Local", "Training"] },
+      { id: 4, title: "Research Institute", tags: ["Innovation", "Education", "Climate Action", "Biodiversity"] },
+      { id: 5, title: "Café Chain", tags: ["Direct Trade", "Local", "Zero Waste", "Training"] },
+      { id: 6, title: "NGO Partner", tags: ["Community", "Education", "Women Owned", "Healthcare"] },
+      { id: 7, title: "Guatemala Farmers", tags: ["Fair Trade", "Indigenous", "Heritage", "Organic"] },
+      { id: 8, title: "Vietnam Collective", tags: ["Direct Trade", "Innovation", "Export", "Training"] },
+      { id: 9, title: "Urban Network", tags: ["Zero Waste", "Local", "Youth", "Community"] },
+      { id: 10, title: "Green Institute", tags: ["Climate Action", "Research", "Biodiversity", "Education"] },
+      { id: 11, title: "Tech Startup", tags: ["Innovation", "Blockchain", "Export", "Training"] },
+      { id: 12, title: "Rural Fund", tags: ["Microfinance", "Community", "Women Owned", "Healthcare"] },
+      { id: 13, title: "Kenya Farmers", tags: ["Fair Trade", "Indigenous", "Heritage", "Export"] },
+      { id: 14, title: "Eco Packaging", tags: ["Zero Waste", "Innovation", "Local", "Climate Action"] },
+      { id: 15, title: "Quality Lab", tags: ["Research", "Training", "Export", "Innovation"] },
+      { id: 16, title: "Mexico Growers", tags: ["Fair Trade", "Indigenous", "Organic", "Community"] },
+      { id: 17, title: "Peru Alliance", tags: ["Heritage", "Biodiversity", "Fair Trade", "Women Owned"] },
+      { id: 18, title: "Japan Importers", tags: ["Direct Trade", "Quality", "Export", "Innovation"] },
+      { id: 19, title: "Nordic Roasters", tags: ["Artisan", "Climate Action", "Zero Waste", "Training"] },
+      { id: 20, title: "Youth Program", tags: ["Education", "Community", "Training", "Local"] },
+      { id: 21, title: "India Collective", tags: ["Fair Trade", "Women Owned", "Organic", "Heritage"] },
+      { id: 22, title: "Brazil Network", tags: ["Export", "Innovation", "Research", "Training"] },
+      { id: 23, title: "US Distributors", tags: ["Local", "Zero Waste", "Direct Trade", "Quality"] },
+      { id: 24, title: "Africa Fund", tags: ["Microfinance", "Healthcare", "Education", "Community"] },
+      { id: 25, title: "Climate Alliance", tags: ["Climate Action", "Research", "Biodiversity", "Innovation"] }
     ];
 
     const nodes = new vis.DataSet([]);
     const edges = new vis.DataSet([]);
     const nodeConnections = {};
 
-    const groups = {
-      farm: {
-        color: { background: '#228b22', border: '#006400' },  // Green for farms
-      },
-      supplier: {
-        color: { background: '#8b4513', border: '#4b2c1b' },  // Brown for suppliers
-      },
-      distributor: {
-        color: { background: '#228b22', border: '#006400' },  // Green for distributors
-      },
-      shop: {
-        color: { background: '#ff7f50', border: '#ff4500' },  // Coral for coffee shops
-      },
-      plant: {
-        color: { background: '#2e8b57', border: '#3cb371' },  // Forest green for plants
-      },
-      profit: {
-        color: { background: '#ffd700', border: '#c41e3a' },  // Gold for profit
-      }
-    };
-
-    // Create a set to ensure unique nodes
-    const addedItems = new Set();
-
     items.forEach(item => {
-      // Add the node (item) only if it hasn't been added already
-      if (!addedItems.has(item.title)) {
-        nodes.add({
-          id: item.title,
-          label: item.title,
-          title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
-          group: item.type.toLowerCase(),
-          font: { color: '#ffffff', size: 16 }
-        });
-        addedItems.add(item.title);
-      }
+      const itemNode = {
+        id: item.id,
+        label: item.title,
+        title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
+        group: "item",
+        size: item.tags.length * 5,
+        color: {
+          background: '#1E90FF',
+          border: '#4682B4',
+          highlight: {
+            background: '#87CEFA',
+            border: '#5F9EA0'
+          }
+        }
+      };
+      nodes.add(itemNode);
 
       item.tags.forEach(tag => {
-        // Create an edge between the item and tag
-        edges.add({
-          from: item.title,
+        const tagNode = nodes.get(tag);
+        if (!tagNode) {
+          nodes.add({ 
+            id: tag, 
+            label: tag, 
+            group: "tag", 
+            size: 10,
+            color: {
+              background: '#32CD32',
+              border: '#228B22',
+              highlight: {
+                background: '#98FB98',
+                border: '#006400'
+              }
+            }
+          });
+        }
+
+        edges.add({ 
+          from: item.id, 
           to: tag,
-          color: { color: '#ffffff', highlight: '#ffd700' }
+          color: {
+            color: '#FFD700',
+            highlight: '#FF8C00'
+          }
         });
 
-        // Track connections for size calculation
         nodeConnections[tag] = (nodeConnections[tag] || 0) + 1;
-        nodeConnections[item.title] = (nodeConnections[item.title] || 0) + 1;
+        nodeConnections[item.id] = (nodeConnections[item.id] || 0) + 1;
       });
     });
 
-    // Adjust the size of each node based on total connections
     nodes.forEach(node => {
       const connectionCount = nodeConnections[node.id] || 0;
-      node.size = Math.max(10, connectionCount * 3);  // Ensure node size is proportional to connections
+      node.size = connectionCount * 3;
       nodes.update(node);
     });
 
     const container = document.getElementById("connections-graph");
     const data = { nodes: nodes, edges: edges };
-
     const options = {
       nodes: {
         shape: 'dot',
-        scaling: {
-          min: 10,
-          max: 50
-        }
+        font: { 
+          size: 14,
+          color: '#F5DEB3'
+        },
       },
       edges: {
         width: 2,
-        color: { color: '#ffffff', highlight: '#ffd700' },
         smooth: {
           type: 'continuous'
         }
       },
       physics: {
-        enabled: true
+        enabled: false,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+          gravitationalConstant: -500,
+          centralGravity: 0.005,
+          springLength: 200,
+          springConstant: 0.04,
+          damping: 0.4,
+          avoidOverlap: 0.5
+        }
       },
       interaction: {
         hover: true,
         zoomView: true,
         dragView: true,
-        dragNodes: true,
         zoomSpeed: 0.5,
-        tooltipDelay: 200
+        initialScale: 0.2,
       },
-      groups: groups,
       layout: {
         randomSeed: 2,
-        improvedLayout: true
+        hierarchical: false,
+        improvedLayout: false,
+        circular: true
       }
     };
 
     const network = new vis.Network(container, data, options);
 
-    // Handle physics toggle button
-    document.querySelector('.toggle-physics-button').addEventListener('click', function () {
-      const physicsEnabled = network.physicsEnabled;
-      network.setOptions({ physics: { enabled: !physicsEnabled } });
+    network.moveTo({
+      position: { x: 0, y: 0 },
+      scale: .3,
+    });
+
+    const toggleButton = document.querySelector(".toggle-physics-button");
+    let physicsEnabled = false;
+    let currentLayout = "circular";
+
+    toggleButton.addEventListener("click", function () {
+      physicsEnabled = !physicsEnabled;
+      options.physics.enabled = physicsEnabled;
+      if (currentLayout === "circular") {
+        options.layout.randomSeed = 2;
+        options.layout.circular = false;
+        currentLayout = "random";
+      } else {
+        options.layout.randomSeed = 2;
+        options.layout.circular = true;
+        currentLayout = "circular";
+      }
+      network.setOptions(options);
+      toggleButton.textContent = physicsEnabled ? "Disable Physics" : "Enable Physics";
     });
   });
 </script>
+
 </body>
 </html>
