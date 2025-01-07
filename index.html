@@ -3,29 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fair Trade Coffee Connections</title>
+  <title>Supply Chain Graph</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <style>
     #connections-graph-container {
       position: relative;
-      background-color: #2C1810;
+      background-color: black;
       margin: 0 auto;
       width: 100%;
       padding: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     #connections-graph {
-      height: 800px;
+      height: 700px;
       width: 100%;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     .toggle-physics-button {
-      background-color: #8B4513;
-      color: #F5DEB3;
+      background-color: #4a90e2;
+      color: white;
       padding: 12px 24px;
       border: none;
       border-radius: 4px;
@@ -33,7 +35,7 @@
       margin: 0 auto;
       cursor: pointer;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       position: sticky;
       top: 10px;
       z-index: 9999;
@@ -41,14 +43,18 @@
     }
 
     .toggle-physics-button:hover {
-      background-color: #A0522D;
+      background-color: #357abd;
+    }
+
+    .toggle-physics-button:active {
+      transform: translateY(1px);
     }
   </style>
 </head>
 <body>
 
 <div id="connections-graph-container">
-  <button class="toggle-physics-button">Switch to Random Layout</button>
+  <button class="toggle-physics-button">Toggle Physics</button>
   <div id="connections-graph"></div>
 </div>
 
@@ -56,36 +62,35 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const items = [
-      { id: 1, title: "Colombian Cooperative", tags: ["Fair Trade", "Organic", "Direct Trade", "Climate Action"] },
-      { id: 2, title: "Ethiopian Union", tags: ["Fair Trade", "Women Owned", "Education", "Heritage"] },
-      { id: 3, title: "Local Roastery", tags: ["Artisan", "Zero Waste", "Local", "Training"] },
-      { id: 4, title: "Research Institute", tags: ["Innovation", "Education", "Climate Action", "Biodiversity"] },
-      { id: 5, title: "Café Chain", tags: ["Direct Trade", "Local", "Zero Waste", "Training"] },
-      { id: 6, title: "NGO Partner", tags: ["Community", "Education", "Women Owned", "Healthcare"] },
-      { id: 7, title: "Guatemala Farmers", tags: ["Fair Trade", "Indigenous", "Heritage", "Organic"] },
-      { id: 8, title: "Vietnam Collective", tags: ["Direct Trade", "Innovation", "Export", "Training"] },
-      { id: 9, title: "Urban Network", tags: ["Zero Waste", "Local", "Youth", "Community"] },
-      { id: 10, title: "Green Institute", tags: ["Climate Action", "Research", "Biodiversity", "Education"] },
-      { id: 11, title: "Tech Startup", tags: ["Innovation", "Blockchain", "Export", "Training"] },
-      { id: 12, title: "Rural Fund", tags: ["Microfinance", "Community", "Women Owned", "Healthcare"] },
-      { id: 13, title: "Kenya Farmers", tags: ["Fair Trade", "Indigenous", "Heritage", "Export"] },
-      { id: 14, title: "Eco Packaging", tags: ["Zero Waste", "Innovation", "Local", "Climate Action"] },
-      { id: 15, title: "Quality Lab", tags: ["Research", "Training", "Export", "Innovation"] },
-      { id: 16, title: "Mexico Growers", tags: ["Fair Trade", "Indigenous", "Organic", "Community"] },
-      { id: 17, title: "Peru Alliance", tags: ["Heritage", "Biodiversity", "Fair Trade", "Women Owned"] },
-      { id: 18, title: "Japan Importers", tags: ["Direct Trade", "Quality", "Export", "Innovation"] },
-      { id: 19, title: "Nordic Roasters", tags: ["Artisan", "Climate Action", "Zero Waste", "Training"] },
-      { id: 20, title: "Youth Program", tags: ["Education", "Community", "Training", "Local"] },
-      { id: 21, title: "India Collective", tags: ["Fair Trade", "Women Owned", "Organic", "Heritage"] },
-      { id: 22, title: "Brazil Network", tags: ["Export", "Innovation", "Research", "Training"] },
-      { id: 23, title: "US Distributors", tags: ["Local", "Zero Waste", "Direct Trade", "Quality"] },
-      { id: 24, title: "Africa Fund", tags: ["Microfinance", "Healthcare", "Education", "Community"] },
-      { id: 25, title: "Climate Alliance", tags: ["Climate Action", "Research", "Biodiversity", "Innovation"] }
+      { id: 1, title: "Raw Material Supplier", tags: ["Raw Materials", "Supplier"] },
+      { id: 2, title: "Component Manufacturer", tags: ["Manufacturing", "Supplier"] },
+      { id: 3, title: "Assembly Plant", tags: ["Assembly", "Manufacturer"] },
+      { id: 4, title: "Warehousing Facility", tags: ["Warehousing", "Logistics"] },
+      { id: 5, title: "Distributor", tags: ["Distribution", "Logistics"] },
+      { id: 6, title: "Retailer", tags: ["Retail", "Customer"] },
+      { id: 7, title: "Logistics Service Provider", tags: ["Logistics", "Transport"] },
+      { id: 8, title: "Raw Material Supplier 2", tags: ["Raw Materials", "Supplier"] },
+      { id: 9, title: "Packaging Supplier", tags: ["Packaging", "Supplier"] },
+      { id: 10, title: "Supplier 3", tags: ["Supplier", "Logistics"] },
+      { id: 11, title: "Customer", tags: ["Customer", "End User"] },
+      { id: 12, title: "Supplier 4", tags: ["Raw Materials", "Supplier"] },
+      { id: 13, title: "Manufacturer", tags: ["Manufacturing", "Manufacturer"] },
+      { id: 14, title: "Supply Chain Manager", tags: ["Logistics", "Management"] },
+      { id: 15, title: "Logistics Coordinator", tags: ["Logistics", "Management"] }
     ];
 
     const nodes = new vis.DataSet([]);
     const edges = new vis.DataSet([]);
     const nodeConnections = {};
+
+    const groups = {
+      item: {
+        color: { background: '#4a90e2', border: '#357abd' }
+      },
+      tag: {
+        color: { background: '#e24a4a', border: '#bd3535' }
+      }
+    };
 
     items.forEach(item => {
       const itemNode = {
@@ -93,15 +98,8 @@
         label: item.title,
         title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
         group: "item",
-        size: item.tags.length * 5,
-        color: {
-          background: '#4CAF50',  // Green for the main items
-          border: '#388E3C',
-          highlight: {
-            background: '#66BB6A',
-            border: '#388E3C'
-          }
-        }
+        size: item.tags.length * 2,
+        font: { color: '#ffffff' }
       };
       nodes.add(itemNode);
 
@@ -111,26 +109,14 @@
           nodes.add({ 
             id: tag, 
             label: tag, 
-            group: "tag", 
-            size: 10,
-            color: {
-              background: '#81C784',  // Lighter green for tags
-              border: '#388E3C',
-              highlight: {
-                background: '#A5D6A7',
-                border: '#66BB6A'
-              }
-            }
+            group: "tag",
+            font: { color: '#ffffff' }
           });
         }
-
         edges.add({ 
           from: item.id, 
           to: tag,
-          color: {
-            color: '#66BB6A',
-            highlight: '#81C784'
-          }
+          color: { color: '#666666', highlight: '#999999' }
         });
 
         nodeConnections[tag] = (nodeConnections[tag] || 0) + 1;
@@ -140,22 +126,24 @@
 
     nodes.forEach(node => {
       const connectionCount = nodeConnections[node.id] || 0;
-      node.size = connectionCount * 3;
+      node.size = Math.max(8, connectionCount * 2);
       nodes.update(node);
     });
 
     const container = document.getElementById("connections-graph");
     const data = { nodes: nodes, edges: edges };
+
     const options = {
       nodes: {
         shape: 'dot',
-        font: { 
-          size: 20,  // Increased label size
-          color: '#F5DEB3'
-        },
+        font: { size: 14 },
+        scaling: {
+          min: 8,
+          max: 12
+        }
       },
       edges: {
-        width: 2,
+        width: 1,
         smooth: {
           type: 'continuous'
         }
@@ -164,58 +152,80 @@
         enabled: false,
         solver: 'forceAtlas2Based',
         forceAtlas2Based: {
-          gravitationalConstant: -500,
-          centralGravity: 0.005,
-          springLength: 200,
-          springConstant: 0.04,
-          damping: 0.4,
-          avoidOverlap: 0.5
+          gravitationalConstant: -50,
+          centralGravity: 0.01,
+          springLength: 100,
+          springConstant: 0.08
+        },
+        stabilization: {
+          iterations: 100
         }
       },
       interaction: {
         hover: true,
         zoomView: true,
         dragView: true,
+        dragNodes: true,
         zoomSpeed: 0.5,
-        initialScale: 0.2,
+        tooltipDelay: 300
       },
+      groups: groups,
       layout: {
         randomSeed: 2,
-        hierarchical: false,
-        improvedLayout: false,
-        circular: true // Initial layout is circular
+        improvedLayout: true
       }
     };
 
     const network = new vis.Network(container, data, options);
 
+    function applyCircularLayout() {
+      const positions = {};
+      const nodeCount = nodes.length;
+      const radius = 300;
+      const angle = (2 * Math.PI) / nodeCount;
+      
+      let i = 0;
+      nodes.forEach((node) => {
+        positions[node.id] = {
+          x: radius * Math.cos(angle * i),
+          y: radius * Math.sin(angle * i)
+        };
+        i++;
+      });
+      
+      network.setOptions({ physics: { enabled: false } });
+      network.moveTo({ scale: 0.3 });
+      network.body.data.nodes.update(
+        nodes.map(node => ({
+          id: node.id,
+          x: positions[node.id].x,
+          y: positions[node.id].y
+        }))
+      );
+    }
+
     network.moveTo({
       position: { x: 0, y: 0 },
-      scale: .3,
+      scale: 0.3,
+      animation: {
+        duration: 1000,
+        easingFunction: 'easeInOutQuad'
+      }
     });
 
+    // Initial layout
+    applyCircularLayout();
+
     const toggleButton = document.querySelector(".toggle-physics-button");
-    let physicsEnabled = false;
-    let currentLayout = "circular";
+    let isPhysicsEnabled = false;
 
-    toggleButton.addEventListener("click", function () {
-      physicsEnabled = !physicsEnabled;
-      options.physics.enabled = physicsEnabled;
-
-      // Toggle between circular and random layout
-      if (currentLayout === "circular") {
-        options.layout.circular = false;  // Switch to random layout
-        options.layout.randomSeed = Math.random();  // Randomize seed for randomness
-        currentLayout = "random";
-        toggleButton.textContent = "Switch to Circular Layout";
+    toggleButton.addEventListener("click", function() {
+      isPhysicsEnabled = !isPhysicsEnabled;
+      if (isPhysicsEnabled) {
+        network.setOptions({ physics: { enabled: true } });
       } else {
-        options.layout.circular = true;  // Switch back to circular layout
-        currentLayout = "circular";
-        toggleButton.textContent = "Switch to Random Layout";
+        applyCircularLayout();
       }
-
-      network.setOptions(options); // Reapply the updated options
-      network.redraw(); // Force a redraw after changing options
     });
   });
 </script>
