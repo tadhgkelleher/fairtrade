@@ -175,12 +175,13 @@
       },
       edges: {
         width: 2,
+        color: { color: '#ffffff', highlight: '#ffd700' },
         smooth: {
           type: 'continuous'
         }
       },
       physics: {
-        enabled: false
+        enabled: true
       },
       interaction: {
         hover: true,
@@ -234,17 +235,12 @@
       }
     });
 
-    applyCircularLayout();
-
-    const toggleButton = document.querySelector(".toggle-physics-button");
-    let isPhysicsEnabled = false;
-
-    toggleButton.addEventListener("click", function() {
-      isPhysicsEnabled = !isPhysicsEnabled;
-      network.setOptions({ physics: { enabled: isPhysicsEnabled } });
+    // Handle physics toggle button
+    document.querySelector('.toggle-physics-button').addEventListener('click', function () {
+      const physicsEnabled = network.physicsEnabled;
+      network.setOptions({ physics: { enabled: !physicsEnabled } });
     });
   });
 </script>
-
 </body>
 </html>
