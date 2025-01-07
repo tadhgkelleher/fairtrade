@@ -48,7 +48,7 @@
 <body>
 
 <div id="connections-graph-container">
-  <button class="toggle-physics-button">Push Button</button>
+  <button class="toggle-physics-button">Switch to Random Layout</button>
   <div id="connections-graph"></div>
 </div>
 
@@ -80,13 +80,7 @@
       { id: 22, title: "Brazil Network", tags: ["Export", "Innovation", "Research", "Training"] },
       { id: 23, title: "US Distributors", tags: ["Local", "Zero Waste", "Direct Trade", "Quality"] },
       { id: 24, title: "Africa Fund", tags: ["Microfinance", "Healthcare", "Education", "Community"] },
-      { id: 25, title: "Climate Alliance", tags: ["Climate Action", "Research", "Biodiversity", "Innovation"] },
-      // Additional Green-themed Nodes
-      { id: 26, title: "Forest Project", tags: ["Sustainability", "Green", "Community", "Biodiversity"] },
-      { id: 27, title: "Solar Co-op", tags: ["Renewable Energy", "Community", "Green", "Innovation"] },
-      { id: 28, title: "Ocean Cleaners", tags: ["Sustainability", "Innovation", "Climate Action", "Biodiversity"] },
-      { id: 29, title: "Urban Farms", tags: ["Green", "Sustainability", "Local", "Innovation"] },
-      { id: 30, title: "Clean Water Network", tags: ["Water", "Sustainability", "Innovation", "Community"] }
+      { id: 25, title: "Climate Alliance", tags: ["Climate Action", "Research", "Biodiversity", "Innovation"] }
     ];
 
     const nodes = new vis.DataSet([]);
@@ -211,13 +205,14 @@
         options.layout.randomSeed = 2;
         options.layout.circular = false;
         currentLayout = "random";
+        toggleButton.textContent = "Switch to Circular Layout";
       } else {
         options.layout.randomSeed = 2;
         options.layout.circular = true;
         currentLayout = "circular";
+        toggleButton.textContent = "Switch to Random Layout";
       }
       network.setOptions(options);
-      toggleButton.textContent = physicsEnabled ? "Disable Physics" : "Enable Physics";
     });
   });
 </script>
