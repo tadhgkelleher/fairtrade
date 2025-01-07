@@ -48,7 +48,7 @@
 <body>
 
 <div id="connections-graph-container">
-  <button class="toggle-physics-button">Enable Physics</button>
+  <button class="toggle-physics-button">Push Button</button>
   <div id="connections-graph"></div>
 </div>
 
@@ -80,7 +80,13 @@
       { id: 22, title: "Brazil Network", tags: ["Export", "Innovation", "Research", "Training"] },
       { id: 23, title: "US Distributors", tags: ["Local", "Zero Waste", "Direct Trade", "Quality"] },
       { id: 24, title: "Africa Fund", tags: ["Microfinance", "Healthcare", "Education", "Community"] },
-      { id: 25, title: "Climate Alliance", tags: ["Climate Action", "Research", "Biodiversity", "Innovation"] }
+      { id: 25, title: "Climate Alliance", tags: ["Climate Action", "Research", "Biodiversity", "Innovation"] },
+      // Additional Green-themed Nodes
+      { id: 26, title: "Forest Project", tags: ["Sustainability", "Green", "Community", "Biodiversity"] },
+      { id: 27, title: "Solar Co-op", tags: ["Renewable Energy", "Community", "Green", "Innovation"] },
+      { id: 28, title: "Ocean Cleaners", tags: ["Sustainability", "Innovation", "Climate Action", "Biodiversity"] },
+      { id: 29, title: "Urban Farms", tags: ["Green", "Sustainability", "Local", "Innovation"] },
+      { id: 30, title: "Clean Water Network", tags: ["Water", "Sustainability", "Innovation", "Community"] }
     ];
 
     const nodes = new vis.DataSet([]);
@@ -95,11 +101,11 @@
         group: "item",
         size: item.tags.length * 5,
         color: {
-          background: '#1E90FF',
-          border: '#4682B4',
+          background: '#4CAF50',  // Green for the main items
+          border: '#388E3C',
           highlight: {
-            background: '#87CEFA',
-            border: '#5F9EA0'
+            background: '#66BB6A',
+            border: '#388E3C'
           }
         }
       };
@@ -114,11 +120,11 @@
             group: "tag", 
             size: 10,
             color: {
-              background: '#32CD32',
-              border: '#228B22',
+              background: '#81C784',  // Lighter green for tags
+              border: '#388E3C',
               highlight: {
-                background: '#98FB98',
-                border: '#006400'
+                background: '#A5D6A7',
+                border: '#66BB6A'
               }
             }
           });
@@ -128,8 +134,8 @@
           from: item.id, 
           to: tag,
           color: {
-            color: '#FFD700',
-            highlight: '#FF8C00'
+            color: '#66BB6A',
+            highlight: '#81C784'
           }
         });
 
