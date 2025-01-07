@@ -200,41 +200,6 @@
 
     const network = new vis.Network(container, data, options);
 
-    function applyCircularLayout() {
-      const positions = {};
-      const nodeCount = nodes.length;
-      const radius = 300;
-      const angle = (2 * Math.PI) / nodeCount;
-
-      let i = 0;
-      nodes.forEach((node) => {
-        positions[node.id] = {
-          x: radius * Math.cos(angle * i),
-          y: radius * Math.sin(angle * i)
-        };
-        i++;
-      });
-
-      network.setOptions({ physics: { enabled: false } });
-      network.moveTo({ scale: 0.3 });
-      network.body.data.nodes.update(
-        nodes.map(node => ({
-          id: node.id,
-          x: positions[node.id].x,
-          y: positions[node.id].y
-        }))
-      );
-    }
-
-    network.moveTo({
-      position: { x: 0, y: 0 },
-      scale: 0.3,
-      animation: {
-        duration: 1000,
-        easingFunction: 'easeInOutQuad'
-      }
-    });
-
     // Handle physics toggle button
     document.querySelector('.toggle-physics-button').addEventListener('click', function () {
       const physicsEnabled = network.physicsEnabled;
