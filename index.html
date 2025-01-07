@@ -183,7 +183,7 @@
         randomSeed: 2,
         hierarchical: false,
         improvedLayout: false,
-        circular: true
+        circular: true // Initial layout is circular
       }
     };
 
@@ -204,13 +204,12 @@
 
       // Toggle between circular and random layout
       if (currentLayout === "circular") {
-        options.layout.randomSeed = 2;
-        options.layout.circular = false;
+        options.layout.circular = false;  // Switch to random layout
+        options.layout.randomSeed = Math.random();  // Randomize seed for randomness
         currentLayout = "random";
         toggleButton.textContent = "Switch to Circular Layout";
       } else {
-        options.layout.randomSeed = 2;
-        options.layout.circular = true;
+        options.layout.circular = true;  // Switch back to circular layout
         currentLayout = "circular";
         toggleButton.textContent = "Switch to Random Layout";
       }
